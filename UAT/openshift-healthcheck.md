@@ -7,7 +7,6 @@
         - [Cluster Nodes](#cluster-nodes)
         - [Cluster Projects](#cluster-projects-namespaces)
         - [Installed Operators](#installed-operators)
-        - [Storage Classes](#storage-classes)
     - [Cluster Image Registry Configuration](#cluster-image-registry-configuration)
 
 ## Cluster Overview 
@@ -15,6 +14,13 @@
 - **Cluster API Address**: https://api.nfeocpuat.accelya.local:6443
 - **Infrastructure provide**: VSphere
 - **OpenShift Version**: 4.11.20 (Stable 4.11) -> **Kubernetes Versoion**: v1.24.6+5658434
+- **Cluster Nodes**: 10 (3 Master, 4 Worker, 3 Infra)
+- **Cluster Projects**: 134
+- **Cluster Monitoring, Logging, Security and Backup tools**:
+    - Monitoring: OpenShift Monitoring (Default)
+    - Logging: ElasticSearch
+    - Security: SentielOne **(No resources found)** & Compliance Operator
+    - Backup: None
 
 ## Cluster Inventory
 
@@ -22,18 +28,18 @@
 
 **Total no. of ndoes**: 10
 
-|Node Type|Nodes|CPU|Memory|
-|---|---|---|---|
-|Master|vlnfeuatmast1.nfeocpuat.cluster.adp|8 Cores| 32 GB|
-|Master|vlnfeuatmast2.nfeocpuat.cluster.adp|8 Cores| 32 GB|
-|Master|vlnfeuatmast3.nfeocpuat.cluster.adp|8 Cores| 32 GB|
-|Infra|vlnfeuatinf1.nfeocpuat.cluster.adp|8 Cores| 64 GB|
-|Infra|vlnfeuatinf2.nfeocpuat.cluster.adp|8 Cores| 64 GB|
-|Infra|vlnfeuatinf3.nfeocpuat.cluster.adp|8 Cores| 64 GB|
-|Worker|vlnfeuatwrk1.nfeocpuat.cluster.adp|12 Cores| 51 GB|
-|Worker|vlnfeuatwrk2.nfeocpuat.cluster.adp|12 Cores| 51 GB|
-|Infra|vlnfeuatwrk3.nfeocpuat.cluster.adp|12 Cores| 51 GB|
-|Infra|vlnfeuatwrk4.nfeocpuat.cluster.adp|12 Cores| 51 GB|
+|Node Type|Nodes|CPU|Memory|Disks|
+|---|---|---|---|---|
+|Master|vlnfeuatmast1.nfeocpuat.cluster.adp|8 Cores| 32 GB|250GB|
+|Master|vlnfeuatmast2.nfeocpuat.cluster.adp|8 Cores| 32 GB|250GB|
+|Master|vlnfeuatmast3.nfeocpuat.cluster.adp|8 Cores| 32 GB|250GB|
+|Infra|vlnfeuatinf1.nfeocpuat.cluster.adp|8 Cores| 64 GB|250GB, 1.1TB, 500GB|
+|Infra|vlnfeuatinf2.nfeocpuat.cluster.adp|8 Cores| 64 GB|250GB, 1.1TB|
+|Infra|vlnfeuatinf3.nfeocpuat.cluster.adp|8 Cores| 64 GB|250GB, 1.1TB, 500GB|
+|Worker|vlnfeuatwrk1.nfeocpuat.cluster.adp|12 Cores| 51 GB|250GB, 300GB|
+|Worker|vlnfeuatwrk2.nfeocpuat.cluster.adp|12 Cores| 51 GB|250GB, 300GB|
+|Infra|vlnfeuatwrk3.nfeocpuat.cluster.adp|12 Cores| 51 GB|250GB, 50GB, 50GB|
+|Infra|vlnfeuatwrk4.nfeocpuat.cluster.adp|12 Cores| 51 GB|250GB|
 
 ```
 NAME                                  STATUS   ROLES    AGE    VERSION
@@ -84,7 +90,7 @@ vlnfeuatwrk4.nfeocpuat.cluster.adp    Ready    worker   124d   v1.24.6+5658434
 | openshift-dns-operator                           | hot-load-file-scheduler           |   |
 | openshift-etcd                                   | informix-cdc                      |   |
 | openshift-etcd-operator                          | istio-system                      |   |
-| openshift-file-integrity                         | kong                              |   |
+| openshift-file-integrity                         | kong                              |  Any Appliction using Kong API |
 | openshift-host-network                           | management                        |   |
 | openshift-image-registry                         | monitoring-service                |   |
 | openshift-infra                                  | notification-management           |   |
@@ -129,6 +135,15 @@ vlnfeuatwrk4.nfeocpuat.cluster.adp    Ready    worker   124d   v1.24.6+5658434
 | kube-public                                      |                                   |   |
 | kube-system                                      |                                   |   |
 
+<span style="color:red"> **Recommendation:** </span>
+- Some of of the Infra related components Pods are running on worker nodes. Please use proper labeling, taints and tolerations to schedule Infra Pods on Infra Nodes to save OpenShift licensing cost.
+
+### Cluster Resource Quotas and Limit Ranges
+
+- Resource Quotas only defined for `openshift-host-network` namespace. 
+
+<span style="color:red"> **Recommendation:** </span>
+- Define Cluser Resource Quotas and Limit Ranges for above mentioned User Projects for better utilization of Cluster CPU and Memory resources. Also, proper settings of Quotas and Ranges will help identify overall cluster utilization and costing. 
 
 ### Installed Operators
 
@@ -142,6 +157,75 @@ vlnfeuatwrk4.nfeocpuat.cluster.adp    Ready    worker   124d   v1.24.6+5658434
 |Kiali Operator|openshift-operators|All Namespaces|
 |Red Hat OpenShift Service Mesh|openshift-operators|All Namespaces|
 
+### ETCD encryption
+
+- Currenlty not enabled
+
+<span style="color:green"> **Recommendation:** </span>
+- Please follow provided link to enable ETCD encryption if require. https://docs.openshift.com/container-platform/4.11/security/encrypting-etcd.html
+
+## Cluster Network Configuration
+
+### Cluster Network & Service CIDR, Network Provider
+
+```yaml
+Spec:
+  Cluster Network:
+    Cidr:         10.128.0.0/14
+    Host Prefix:  24
+  External IP:
+    Policy:
+  Network Type:  OpenShiftSDN
+  Service Network:
+    172.30.0.0/16
+Status:
+  Cluster Network:
+    Cidr:               10.128.0.0/14
+    Host Prefix:        24
+  Cluster Network MTU:  1450
+  Network Type:         OpenShiftSDN
+  Service Network:
+    172.30.0.0/16
+```
+<span style="color:green"> **Recommendation:** </span>
+- Current **Cluster Network Type** is `OpenShiftSDN`. Starting from OpenShift versoin 4.12.x, default **Cluster Network Type** will be `OVN-Kubernetes` for new cluster installation. 
+
+### OpenShift Ingress Controller and Route Configuration
+
+- Currently cluster uses default Ingress Controller to create new routes and exposes deployed Applications.
+
+```
+NAMESPACE                    NAME      AGE
+openshift-ingress-operator   default   125d
+```
+
+<span style="color:green"> **Recommendation:** </span>
+- Create additional sharded Ingress Controller on cluster, which allows 
+    - To use custom TLS certificates for Applications other than default `*.apps` certificate
+    - Customization of endpoint URLs for routes 
+
+
+## Cluster Storage Configuration
+
+### Cluster CSI Nodes
+
+```
+NAME                                  DRIVERS   AGE
+vlnfeuatinf1.nfeocpuat.cluster.adp    1         125d
+vlnfeuatinf2.nfeocpuat.cluster.adp    1         125d
+vlnfeuatinf3.nfeocpuat.cluster.adp    1         125d
+vlnfeuatmast1.nfeocpuat.cluster.adp   1         125d
+vlnfeuatmast2.nfeocpuat.cluster.adp   1         125d
+vlnfeuatmast3.nfeocpuat.cluster.adp   1         125d
+vlnfeuatwrk1.nfeocpuat.cluster.adp    1         125d
+vlnfeuatwrk2.nfeocpuat.cluster.adp    1         125d
+vlnfeuatwrk3.nfeocpuat.cluster.adp    1         125d
+vlnfeuatwrk4.nfeocpuat.cluster.adp    1         125
+```
+
+<span style="color:green"> **Recommendation:** </span>
+-  Leverage equal no. of volumes and similar sizes across all CSI nodes. 
+
 ### Storage Classes
 
 ```
@@ -152,7 +236,7 @@ thin-csi          csi.vsphere.vmware.com         Delete          WaitForFirstCon
 thin-csi-retain   csi.vsphere.vmware.com         Retain          WaitForFirstConsumer   true                   122d
 ```
 
-## Cluster Image Registry configuration 
+### Internal Image Registry Configuration 
 
 ```
 NAME                                               READY   STATUS      RESTARTS   AGE
@@ -177,4 +261,8 @@ NAME                 STATUS   VOLUME                  CAPACITY   ACCESS MODES   
 image-registry-pvc   Bound    image-registry-volume   500Gi      RWX            nfs-non-dynamic   119d
 ```
 
-> <span style="color:red"> **Recommendation** </span>: Use VMware or any third party CSI for registry storage instead of nfs-provisioner for support compatibility and performance.
+<span style="color:red"> **Recommendation:** </span>
+- Use VMware or any third party CSI for registry storage instead of nfs-provisioner for support compatibility and performance.
+
+## Cluster Security Configuration
+
