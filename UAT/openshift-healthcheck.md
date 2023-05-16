@@ -27,7 +27,7 @@
 - **Cluster Projects**: 134
 - **Cluster Monitoring, Logging, Security and Backup tools**:
     - Monitoring: OpenShift Monitoring (Default)
-    - Logging: ElasticSearch
+    - Logging: ElasticSearch **(Not operational)**
     - Security: SentielOne **(No resources found)** & Compliance Operator
     - Backup: None
 
