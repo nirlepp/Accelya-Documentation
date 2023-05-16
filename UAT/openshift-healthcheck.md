@@ -6,8 +6,17 @@
     - [Cluster Inventory](#cluster-inventory)
         - [Cluster Nodes](#cluster-nodes)
         - [Cluster Projects](#cluster-projects-namespaces)
+        - [Cluster Resource Quotas and Limit Ranges](#cluster-resource-quotas-and-limit-ranges)
         - [Installed Operators](#installed-operators)
-    - [Cluster Image Registry Configuration](#cluster-image-registry-configuration)
+        - [ETCD encryption](#etcd-encryption)
+    - [Cluster Network Configuration](#cluster-network-configuration)
+        - [Cluster Network& Service CIDR, Network Provider](#cluster-network--service-cidr-network-provider)
+        - [OpenShift Ingress Controller and Route Configuration](#openshift-ingress-controller-and-route-configuration)
+    - [Cluster Storage Configuration](#cluster-storage-configuration)
+        - [Cluster CSI Nodes](#cluster-csi-nodes)
+        - [Storage Classes](#storage-classes)
+        - [Internal Image Registry Configuration](#internal-image-registry-configuration)
+    - [Cluster Security Configuration](#cluster-security-configuration)
 
 ## Cluster Overview 
 
