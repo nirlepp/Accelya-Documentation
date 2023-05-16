@@ -120,7 +120,7 @@ vlnfeuatwrk4.nfeocpuat.cluster.adp    Ready    worker   124d   v1.24.6+5658434
 | kube-public                                      |                                   |   |
 | kube-system                                      |                                   |   |
 
-## Installed Operators
+### Installed Operators
 
 |Installed Operator|Namespace|Managed Namespace|
 |---|---|---|
@@ -131,3 +131,40 @@ vlnfeuatwrk4.nfeocpuat.cluster.adp    Ready    worker   124d   v1.24.6+5658434
 |Red Hat OpenShift distributed tracing platform|openshift-distributed-tracing|All Namespaces|
 |Kiali Operator|openshift-operators|All Namespaces|
 |Red Hat OpenShift Service Mesh|openshift-operators|All Namespaces|
+
+### Storage Classes
+
+```
+NAME              PROVISIONER                    RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+nfs-non-dynamic   kubernetes.io/no-provisioner   Retain          Immediate              true                   119d
+thin (default)    kubernetes.io/vsphere-volume   Delete          Immediate              false                  124d
+thin-csi          csi.vsphere.vmware.com         Delete          WaitForFirstConsumer   true                   124d
+thin-csi-retain   csi.vsphere.vmware.com         Retain          WaitForFirstConsumer   true                   122d
+```
+
+## Cluster Image Registry configuration 
+
+```
+NAME                                               READY   STATUS      RESTARTS   AGE
+cluster-image-registry-operator-6c9b8647c6-j668w   1/1     Running     0          117d
+image-pruner-28067040-fmbgs                        0/1     Completed   0          2d2h
+image-pruner-28068480-k5gr9                        0/1     Completed   0          26h
+image-pruner-28069920-kqpg5                        0/1     Completed   0          162m
+image-registry-6b9b7844bb-c5hfl                    1/1     Running     0          117d
+image-registry-6b9b7844bb-psj7p                    1/1     Running     0          117d
+node-ca-2c8pn                                      1/1     Running     3          124d
+node-ca-4bgcz                                      1/1     Running     4          124d
+node-ca-hwzj6                                      1/1     Running     3          124d
+node-ca-lzmpt                                      1/1     Running     4          124d
+node-ca-rhqjb                                      1/1     Running     4          124d
+node-ca-s7qbd                                      1/1     Running     4          124d
+node-ca-tsl58                                      1/1     Running     4          124d
+node-ca-wbpvh                                      1/1     Running     3          124d
+node-ca-z7hsp                                      1/1     Running     3          124d
+node-ca-ztk9z                                      1/1     Running     4          124d
+
+NAME                 STATUS   VOLUME                  CAPACITY   ACCESS MODES   STORAGECLASS      AGE
+image-registry-pvc   Bound    image-registry-volume   500Gi      RWX            nfs-non-dynamic   119d
+```
+
+> <span style="color:red"> **Recommendation** </span>: Use VMware or any third party CSI for registry storage instead of nfs-provisioner for support compatibility and performance.
