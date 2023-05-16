@@ -120,9 +120,7 @@ vlnfeuatwrk4.nfeocpuat.cluster.adp    Ready    worker   124d   v1.24.6+5658434
 | kube-public                                      |                                   |   |
 | kube-system                                      |                                   |   |
 
-<<<<<<< HEAD
 
-=======
 ### Installed Operators
 
 |Installed Operator|Namespace|Managed Namespace|
@@ -171,4 +169,3 @@ image-registry-pvc   Bound    image-registry-volume   500Gi      RWX            
 ```
 
 > <span style="color:red"> **Recommendation** </span>: Use VMware or any third party CSI for registry storage instead of nfs-provisioner for support compatibility and performance.
->>>>>>> 52dba8f97a40ff4c1818c42f8984ea7e425cd289
