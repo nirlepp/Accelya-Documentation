@@ -1,6 +1,15 @@
 
 # Accelya - UAT OpenShift Cluster Health Check Documentation
 
+- [Accelya - UAT OpenShift Cluster Health Check](#accelya---uat-openshift-cluster-health-check-documentation)
+    - [Cluster Overview](#cluster-overview)
+    - [Cluster Inventory](#cluster-inventory)
+        - [Cluster Nodes](#cluster-nodes)
+        - [Cluster Projects](#cluster-projects-namespaces)
+        - [Installed Operators](#installed-operators)
+        - [Storage Classes](#storage-classes)
+    - [Cluster Image Registry Configuration](#cluster-image-registry-configuration)
+
 ## Cluster Overview 
 
 - **Cluster API Address**: https://api.nfeocpuat.accelya.local:6443
