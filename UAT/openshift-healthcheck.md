@@ -168,10 +168,23 @@ vlnfeuatwrk4.nfeocpuat.cluster.adp    Ready    worker   124d   v1.24.6+5658434
 
 ### ETCD encryption
 
-- Currenlty not enabled
+- ETCD encrytion is enabled and below OpenShift API server and Kubernetes API server resources are encrypted:
+  - Secrets
+  - Configmaps
+  - Routes
+  - OAuth Access Tokens
+  - OAuth Authorize Tokens
 
-<span style="color:green"> **Recommendation:** </span>
-- Please follow provided link to enable ETCD encryption if require. https://docs.openshift.com/container-platform/4.11/security/encrypting-etcd.html
+```
+EncryptionCompleted
+All resources encrypted: routes.route.openshift.io
+All resources encrypted: secrets, configmaps
+All resources encrypted: oauthaccesstokens.oauth.openshift.io, oauthauthorizetokens.oauth.openshift.io
+```
+
+<span style="color:red"> **Recommendation:** </span>
+- When you enable etcd encryption, encryption keys are created. These keys are rotated on a weekly basis. You must have these keys to restore from an etcd backup.
+- Please make sure to take a backup of latest encryptions keys every week.
 
 ## Cluster Network Configuration
 
@@ -274,4 +287,92 @@ image-registry-pvc   Bound    image-registry-volume   500Gi      RWX            
 - Use VMware or any third party CSI for registry storage instead of nfs-provisioner for support compatibility and performance.
 
 ## Cluster Security Configuration
+
+### Default Ingress and API Certificates
+
+- Default Ingress and API Certificates are not currently configured
+- All cluster traffice for `*.apps` and `API` endpoints will be in plain text 
+
+**Default Ingress config**
+```yaml
+apiVersion: operator.openshift.io/v1
+kind: IngressController
+metadata:
+  creationTimestamp: "2023-01-11T09:11:54Z"
+  finalizers:
+  - ingresscontroller.operator.openshift.io/finalizer-ingresscontroller
+  generation: 2
+  name: default
+  namespace: openshift-ingress-operator
+  resourceVersion: "105780535"
+  uid: c353570c-d452-422d-8e12-bd1ca5869d4d
+spec:
+  clientTLS:
+    clientCA:
+      name: ""
+    clientCertificatePolicy: ""
+  httpCompression: {}
+  httpEmptyRequestsPolicy: Respond
+  httpErrorCodePages:
+    name: ""
+  nodePlacement:
+    nodeSelector:
+      matchLabels:
+        node-role.kubernetes.io/infra: ""
+  replicas: 3
+  tuningOptions: {}
+  unsupportedConfigOverrides: null
+```
+
+**API Server config**
+```yaml
+apiVersion: config.openshift.io/v1
+kind: APIServer
+metadata:
+  annotations:
+    include.release.openshift.io/ibm-cloud-managed: "true"
+    include.release.openshift.io/self-managed-high-availability: "true"
+    include.release.openshift.io/single-node-developer: "true"
+    oauth-apiserver.openshift.io/secure-token-storage: "true"
+    release.openshift.io/create-only: "true"
+  creationTimestamp: "2023-01-11T08:59:32Z"
+  generation: 2
+  name: cluster
+  ownerReferences:
+  - apiVersion: config.openshift.io/v1
+    kind: ClusterVersion
+    name: version
+    uid: c913b03c-acbd-4af8-86f9-3a2468748bbc
+  resourceVersion: "4721113"
+  uid: 9dfa3cc7-1201-4325-9445-72620adb2aff
+spec:
+  audit:
+    profile: Default
+  encryption:
+    type: aescbc
+```
+
+<span style="color:red"> **Recommendation:** </span>
+- Generate two separate SSL certificates as per below and secure `*.apps` and `API` endpoint using those certificates.
+  - one wild card certificate for *.apps.<cluster-name>.<base-domain> with `subjectAltName`.
+  - certificate for `api.<cluster-name>.<base-domina> with `subjectAltName`.
+
+### Identity Providers Configuration
+
+- `htpasswd` and `LDAP` identity providers are configured for cluster and working as expected. 
+
+<span style="color:green"> **Recommendation:** </span>
+
+
+### Cluster Users, Groups, Roles and Permissions
+
+- Cluster Users authentication and authorization are configured using `htpasswd` and `LDAP` IDP with appropriate permissions for required users. 
+- Proper OpenShift roles `cluster-admin, admin, view, edit` are being used for Users and ServiceAccounts permissions.  
+
+## OpenShift Cluster Upgrade
+
+- OpenShift Cluster version: 4.11.20
+- OpenShift Cluster 4.11.x full support ended on April 17,2023 and currently it's in Maintenance support phase till Feb 10, 2024. 
+- Please upgrade this cluster to 4.12.x within 6 months. 
+// add picture
 
