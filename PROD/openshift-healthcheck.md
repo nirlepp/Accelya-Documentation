@@ -1,7 +1,7 @@
 
-# Accelya - UAT OpenShift Cluster Health Check Documentation
+# Accelya - PROD OpenShift Cluster Health Check Documentation
 
-- [Accelya - UAT OpenShift Cluster Health Check](#accelya---uat-openshift-cluster-health-check-documentation)
+- [Accelya - PROD OpenShift Cluster Health Check](#accelya---prod-openshift-cluster-health-check-documentation)
     - [Cluster Overview](#cluster-overview)
     - [Cluster Inventory](#cluster-inventory)
         - [Cluster Nodes](#cluster-nodes)
@@ -20,15 +20,15 @@
 
 ## Cluster Overview 
 
-- **Cluster API Address**: https://api.nfeocpuat.accelya.local:6443
+- **Cluster API Address**: https://api.nfeocpprod.accelya.local:6443
 - **Infrastructure provide**: VSphere
-- **OpenShift Version**: 4.11.20 (Stable 4.11) -> **Kubernetes Versoion**: v1.24.6+5658434
+- **OpenShift Version**: 4.9.28 (Stable 4.9) -> **Kubernetes Versoion**: v1.22.5+a36406b
 - **Cluster Nodes**: 10 (3 Master, 4 Worker, 3 Infra)
-- **Cluster Projects**: 134
+- **Cluster Projects**: 132
 - **Cluster Monitoring, Logging, Security and Backup tools**:
     - Monitoring: OpenShift Monitoring (Default)
-    - Logging: ElasticSearch **(Not operational)**
-    - Security: SentielOne **(No resources found)** & Compliance Operator
+    - Logging: ElasticSearch
+    - Security: SentielOne & Compliance Operator
     - Backup: None
 
 ## Cluster Inventory
@@ -39,107 +39,109 @@
 
 |Node Type|Nodes|CPU|Memory|Disks|
 |---|---|---|---|---|
-|Master|vlnfeuatmast1.nfeocpuat.cluster.adp|8 Cores| 32 GB|250GB|
-|Master|vlnfeuatmast2.nfeocpuat.cluster.adp|8 Cores| 32 GB|250GB|
-|Master|vlnfeuatmast3.nfeocpuat.cluster.adp|8 Cores| 32 GB|250GB|
-|Infra|vlnfeuatinf1.nfeocpuat.cluster.adp|8 Cores| 64 GB|250GB, 1.1TB, 500GB|
-|Infra|vlnfeuatinf2.nfeocpuat.cluster.adp|8 Cores| 64 GB|250GB, 1.1TB|
-|Infra|vlnfeuatinf3.nfeocpuat.cluster.adp|8 Cores| 64 GB|250GB, 1.1TB, 500GB|
-|Worker|vlnfeuatwrk1.nfeocpuat.cluster.adp|12 Cores| 51 GB|250GB, 300GB|
-|Worker|vlnfeuatwrk2.nfeocpuat.cluster.adp|12 Cores| 51 GB|250GB, 300GB|
-|Infra|vlnfeuatwrk3.nfeocpuat.cluster.adp|12 Cores| 51 GB|250GB, 50GB, 50GB|
-|Infra|vlnfeuatwrk4.nfeocpuat.cluster.adp|12 Cores| 51 GB|250GB|
+|Master|vlnfeprodmaster1.nfeocpprod.cluster.adp|8 Cores| 32 GB|250GB|
+|Master|vlnfeprodmaster2.nfeocpprod.cluster.adp|8 Cores| 32 GB|250GB|
+|Master|vlnfeprodmaster3.nfeocpprod.cluster.adp|8 Cores| 32 GB|250GB|
+|Infra|vlnfeprodinfra1.nfeocpprod.cluster.adp|8 Cores| 64 GB|250GB, 1.1TB, 500GB|
+|Infra|vlnfeprodinfra2.nfeocpprod.cluster.adp|8 Cores| 64 GB|250GB, 1.1TB|
+|Infra|vlnfeprodinfra3.nfeocpprod.cluster.adp|8 Cores| 64 GB|250GB, 1.1TB, 500GB|
+|Worker|vlnfeprodnode1.nfeocpprod.cluster.adp|12 Cores| 51 GB|250GB, 300GB|
+|Worker|vlnfeprodnode2.nfeocpprod.cluster.adp|12 Cores| 51 GB|250GB, 300GB|
+|Worker|vlnfeprodnode3.nfeocpprod.cluster.adp|12 Cores| 51 GB|250GB, 50GB, 50GB|
+|Worker|vlnfeprodnode4.nfeocpprod.cluster.adp|12 Cores| 51 GB|250GB|
 
 ```
 NAME                                  STATUS   ROLES    AGE    VERSION
-vlnfeuatinf1.nfeocpuat.cluster.adp    Ready    infra    124d   v1.24.6+5658434
-vlnfeuatinf2.nfeocpuat.cluster.adp    Ready    infra    124d   v1.24.6+5658434
-vlnfeuatinf3.nfeocpuat.cluster.adp    Ready    infra    124d   v1.24.6+5658434
-vlnfeuatmast1.nfeocpuat.cluster.adp   Ready    master   124d   v1.24.6+5658434
-vlnfeuatmast2.nfeocpuat.cluster.adp   Ready    master   124d   v1.24.6+5658434
-vlnfeuatmast3.nfeocpuat.cluster.adp   Ready    master   124d   v1.24.6+5658434
-vlnfeuatwrk1.nfeocpuat.cluster.adp    Ready    worker   124d   v1.24.6+5658434
-vlnfeuatwrk2.nfeocpuat.cluster.adp    Ready    worker   124d   v1.24.6+5658434
-vlnfeuatwrk3.nfeocpuat.cluster.adp    Ready    worker   124d   v1.24.6+5658434
-vlnfeuatwrk4.nfeocpuat.cluster.adp    Ready    worker   124d   v1.24.6+5658434
+NAME                                      STATUS   ROLES    AGE    VERSION
+vlnfeprodinfra1.nfeocpprod.cluster.adp    Ready    infra    264d   v1.22.5+a36406b
+vlnfeprodinfra2.nfeocpprod.cluster.adp    Ready    infra    264d   v1.22.5+a36406b
+vlnfeprodinfra3.nfeocpprod.cluster.adp    Ready    infra    264d   v1.22.5+a36406b
+vlnfeprodmaster1.nfeocpprod.cluster.adp   Ready    master   264d   v1.22.5+a36406b
+vlnfeprodmaster2.nfeocpprod.cluster.adp   Ready    master   264d   v1.22.5+a36406b
+vlnfeprodmaster3.nfeocpprod.cluster.adp   Ready    master   264d   v1.22.5+a36406b
+vlnfeprodnode1.nfeocpprod.cluster.adp     Ready    worker   264d   v1.22.5+a36406b
+vlnfeprodnode2.nfeocpprod.cluster.adp     Ready    worker   264d   v1.22.5+a36406b
+vlnfeprodnode3.nfeocpprod.cluster.adp     Ready    worker   264d   v1.22.5+a36406b
+vlnfeprodnode4.nfeocpprod.cluster.adp     Ready    worker   79d    v1.22.5+a36406b
 ```
 
 ### Cluster Projects (Namespaces)
 
-**Total no. of Projects**: 134
+**Total no. of Projects**: 132
 
 |System Projects|User Projects|Comment|
 |---|---|---|
 | openshift                                        | advanced-payment-management       |   |
 | openshift-apiserver                              | agent-management                  |   |
 | openshift-apiserver-operator                     | airline-management                |   |
-| openshift-authentication                         | asd-stock-request                 |   |
-| openshift-authentication-operator                | batch-migration-processor         |   |
-| openshift-cloud-controller-manager               | bsp-management                    |   |
-| openshift-cloud-controller-manager-operator      | cassandra-exporter                |   |
-| openshift-cloud-credential-operator              | cdc-replication-job               |   |
-| openshift-cloud-network-config-controller        | cicd                              |   |
-| openshift-cluster-csi-drivers                    | currency-management               |   |
-| openshift-cluster-machine-approver               | database                          |   |
-| openshift-cluster-node-tuning-operator           | demo-sm                           |   |
-| openshift-cluster-samples-operator               | dmz                               |   |
-| openshift-cluster-storage-operator               | document-enquiry                  |   |
-| openshift-cluster-version                        | elastic-cloud                     |   |
-| openshift-compliance                             | elasticsearch7-exporter           |   |
-| openshift-config                                 | fop-authentication-service        |   |
-| openshift-config-managed                         | fop-risk-monitoring               |   |
-| openshift-config-operator                        | frontend                          |   |
-| openshift-console                                | gateway                           |   |
-| openshift-console-operator                       | gds-management                    |   |
-| openshift-console-user-settings                  | globalsearch                      |   |
-| openshift-controller-manager                     | grafana                           |   |
-| openshift-controller-manager-operator            | hot-load-document-transformer     |   |
-| openshift-distributed-tracing                    | hot-load-evaluation-processor     |   |
-| openshift-dns                                    | hot-load-file-processor           |   |
-| openshift-dns-operator                           | hot-load-file-scheduler           |   |
-| openshift-etcd                                   | informix-cdc                      |   |
-| openshift-etcd-operator                          | istio-system                      |   |
-| openshift-file-integrity                         | kong                              |  Any Appliction using Kong API |
-| openshift-host-network                           | management                        |   |
-| openshift-image-registry                         | monitoring-service                |   |
-| openshift-infra                                  | notification-management           |   |
-| openshift-ingress                                | notification-processor            |   |
-| openshift-ingress-canary                         | pbd-management                    |   |
-| openshift-ingress-operator                       | period-management                 |   |
-| openshift-insights                               | postgres-exporter                 |   |
-| openshift-kni-infra                              | postgresql                        |   |
-| openshift-kube-apiserver                         | qualys                            |   |
-| openshift-kube-apiserver-operator                | rabbitmq                          |   |
-| openshift-kube-controller-manager                | redis                             |   |
-| openshift-kube-controller-manager-operator       | rejected-documents-file-processor |   |
-| openshift-kube-scheduler                         | rejected-documents-file-scheduler |   |
-| openshift-kube-scheduler-operator                | rejected-documents-management     |   |
-| openshift-kube-storage-version-migrator          | sales-query                       |   |
-| openshift-kube-storage-version-migrator-operator | sales-query-processor             |   |
-| openshift-logging                                | sentinelone                       |   |
-| openshift-machine-api                            | test                              |   |
-| openshift-machine-config-operator                | test-shg                          |   |
-| openshift-marketplace                            | testshg - test_shg                |   |
-| openshift-monitoring                             | sales-query-processor             |   |
-| openshift-multus                                 | ticketing-authority               |   |
-| openshift-network-diagnostics                    | tsimon-ns1                        |   |
-| openshift-network-operator                       | tsimon-ns2                        |   |
-| openshift-node                                   | user-feedback                     |   |
-| openshift-nutanix-infra                          | user-management-integration       |   |
-| openshift-oauth-apiserver                        | wechat-management                 |   |
-| openshift-openstack-infra                        | zookeeper                         |   |
-| openshift-operator-lifecycle-manager             | user-feedback                     |   |
-| openshift-operators                              | user-management-integration       |   |
-| openshift-operators-redhat                       | wechat-management                 |   |
-| openshift-ovirt-infra                            | zookeeper                         |   |
-| openshift-route-controller-manager               |                                   |   |
+| openshift-authentication                         | app-deploy-on-service-mesh        |   |
+| openshift-authentication-operator                | bsp-management                    |   |
+| openshift-cloud-controller-manager               | cassandra-exporter                |   |
+| openshift-cloud-controller-manager-operator      | cdc-replication-job               |   |
+| openshift-cloud-credential-operator              | cicd                              |   |
+| openshift-cluster-csi-drivers                    | cicd-test                         |   |
+| openshift-cluster-machine-approver               | csi-driver-smb                    |   |
+| openshift-cluster-node-tuning-operator           | currency-management               |   |
+| openshift-cluster-samples-operator               | database                          |   |
+| openshift-cluster-storage-operator               | dmz                               |   |
+| openshift-cluster-version                        | document-enquiry                  |   |
+| openshift-compliance                             | frontend                          |   |
+| openshift-config                                 | gateway                           |   |
+| openshift-config-managed                         | gds-management                    |   |
+| openshift-config-operator                        | globalsearch                      |   |
+| openshift-console                                | grafana                           |   |
+| openshift-console-operator                       | grafana-waps-monitoring           |   |
+| openshift-console-user-settings                  | hot-load-document-transformer     |   |
+| openshift-controller-manager                     | hot-load-evaluation-processor     |   |
+| openshift-controller-manager-operator            | hot-load-file-processor           |   |
+| openshift-distributed-tracing                    | hot-load-file-scheduler           |   |
+| openshift-dns                                    | informix-cdc                      |   |
+| openshift-dns-operator                           | internal                          |   |
+| openshift-etcd                                   | istio-system                      |   |
+| openshift-etcd-operator                          | kong                              |   |
+| openshift-file-integrity                         | management                        |   |
+| openshift-host-network                           | monitorin-grafana-waps            |   |
+| openshift-image-registry                         | period-management                 |   |
+| openshift-infra                                  | postgres-exporter                 |   |
+| openshift-ingress                                | postgresql                        |   |
+| openshift-ingress-canary                         | qualys                            |   |
+| openshift-ingress-operator                       | rabbitmq                          |   |
+| openshift-insights                               | redis                             |   |
+| openshift-kni-infra                              | rejected-documents-file-processor |   |
+| openshift-kube-apiserver                         | rejected-documents-file-scheduler |   |
+| openshift-kube-apiserver-operator                | rejected-documents-management     |   |
+| openshift-kube-controller-manager                | sales-query                       |   |
+| openshift-kube-controller-manager-operator       | sales-query-processor             |   |
+| openshift-kube-scheduler                         | sentinelone                       |   |
+| openshift-kube-scheduler-operator                | servicemesh-test-1                |   |
+| openshift-kube-storage-version-migrator          | servicemesh-test-2                |   |
+| openshift-kube-storage-version-migrator-operator | synchronizer                      |   |
+| openshift-kubevirt-infra                         | test                              |   |
+| openshift-local-storage                          | test-deploy                       |   |
+| openshift-logging                                | test-qa                           |   |
+| openshift-machine-api                            | test-registry                     |   |
+| openshift-machine-config-operator                | test-shg1 - test_shg1             |   |
+| openshift-marketplace                            | testporjectkt                     |   |
+| openshift-monitoring                             | user-feedback                     |   |
+| openshift-multus                                 | user-management-integration       |   |
+| openshift-must-gather-9zvdl                      | waps-monitoring                   |   |
+| openshift-must-gather-cj5bz                      | zookeeper                         |   |
+| openshift-must-gather-gjkp8                      |                                   |   |
+| openshift-network-diagnostics                    |                                   |   |
+| openshift-network-operator                       |                                   |   |
+| openshift-node                                   |                                   |   |
+| openshift-oauth-apiserver                        |                                   |   |
+| openshift-openstack-infra                        |                                   |   |
+| openshift-operator-lifecycle-manager             |                                   |   |
+| openshift-operators                              |                                   |   |
+| openshift-operators-redhat                       |                                   |   |
+| openshift-ovirt-infra                            |                                   |   |
 | openshift-sdn                                    |                                   |   |
 | openshift-service-ca                             |                                   |   |
 | openshift-service-ca-operator                    |                                   |   |
 | openshift-user-workload-monitoring               |                                   |   |
 | openshift-vsphere-infra                          |                                   |   |
 | default                                          |                                   |   |
-| audit                                            |                                   |   |
 | kube-node-lease                                  |                                   |   |
 | kube-public                                      |                                   |   |
 | kube-system                                      |                                   |   |
@@ -149,7 +151,7 @@ vlnfeuatwrk4.nfeocpuat.cluster.adp    Ready    worker   124d   v1.24.6+5658434
 
 ### Cluster Resource Quotas and Limit Ranges
 
-- Resource Quotas only defined for `openshift-host-network` namespace. 
+- Resource Quotas only defined for `openshift-host-network (default)` namespace. 
 
 <span style="color:red"> **Recommendation:** </span>
 - Define Cluser Resource Quotas and Limit Ranges for above mentioned User Projects for better utilization of Cluster CPU and Memory resources. Also, proper settings of Quotas and Ranges will help identify overall cluster utilization and costing. 
@@ -218,7 +220,7 @@ Status:
 
 ```
 NAMESPACE                    NAME      AGE
-openshift-ingress-operator   default   125d
+openshift-ingress-operator   default   383d
 ```
 
 <span style="color:green"> **Recommendation:** </span>
@@ -232,17 +234,17 @@ openshift-ingress-operator   default   125d
 ### Cluster CSI Nodes
 
 ```
-NAME                                  DRIVERS   AGE
-vlnfeuatinf1.nfeocpuat.cluster.adp    1         125d
-vlnfeuatinf2.nfeocpuat.cluster.adp    1         125d
-vlnfeuatinf3.nfeocpuat.cluster.adp    1         125d
-vlnfeuatmast1.nfeocpuat.cluster.adp   1         125d
-vlnfeuatmast2.nfeocpuat.cluster.adp   1         125d
-vlnfeuatmast3.nfeocpuat.cluster.adp   1         125d
-vlnfeuatwrk1.nfeocpuat.cluster.adp    1         125d
-vlnfeuatwrk2.nfeocpuat.cluster.adp    1         125d
-vlnfeuatwrk3.nfeocpuat.cluster.adp    1         125d
-vlnfeuatwrk4.nfeocpuat.cluster.adp    1         125
+NAME                                      DRIVERS   AGE
+vlnfeprodinfra1.nfeocpprod.cluster.adp    1         264d
+vlnfeprodinfra2.nfeocpprod.cluster.adp    1         264d
+vlnfeprodinfra3.nfeocpprod.cluster.adp    1         264d
+vlnfeprodmaster1.nfeocpprod.cluster.adp   1         264d
+vlnfeprodmaster2.nfeocpprod.cluster.adp   1         264d
+vlnfeprodmaster3.nfeocpprod.cluster.adp   1         264d
+vlnfeprodnode1.nfeocpprod.cluster.adp     1         264d
+vlnfeprodnode2.nfeocpprod.cluster.adp     1         264d
+vlnfeprodnode3.nfeocpprod.cluster.adp     1         264d
+vlnfeprodnode4.nfeocpprod.cluster.adp     1         79d
 ```
 
 <span style="color:green"> **Recommendation:** </span>
@@ -251,40 +253,39 @@ vlnfeuatwrk4.nfeocpuat.cluster.adp    1         125
 ### Storage Classes
 
 ```
-NAME              PROVISIONER                    RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
-nfs-non-dynamic   kubernetes.io/no-provisioner   Retain          Immediate              true                   119d
-thin (default)    kubernetes.io/vsphere-volume   Delete          Immediate              false                  124d
-thin-csi          csi.vsphere.vmware.com         Delete          WaitForFirstConsumer   true                   124d
-thin-csi-retain   csi.vsphere.vmware.com         Retain          WaitForFirstConsumer   true                   122d
+NAME             PROVISIONER                    RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+localblock-sc    no-provisioning                Retain          Immediate           true                   365d
+thin (default)   kubernetes.io/vsphere-volume   Delete          Immediate           false                  383d
+thin-retain      kubernetes.io/vsphere-volume   Retain          Immediate           false                  378d
+vsphere-sc       kubernetes.io/vsphere-volume   Delete          Immediate           false                  265d
 ```
 
 ### Internal Image Registry Configuration 
 
 ```
 NAME                                               READY   STATUS      RESTARTS   AGE
-cluster-image-registry-operator-6c9b8647c6-j668w   1/1     Running     0          117d
-image-pruner-28067040-fmbgs                        0/1     Completed   0          2d2h
-image-pruner-28068480-k5gr9                        0/1     Completed   0          26h
-image-pruner-28069920-kqpg5                        0/1     Completed   0          162m
-image-registry-6b9b7844bb-c5hfl                    1/1     Running     0          117d
-image-registry-6b9b7844bb-psj7p                    1/1     Running     0          117d
-node-ca-2c8pn                                      1/1     Running     3          124d
-node-ca-4bgcz                                      1/1     Running     4          124d
-node-ca-hwzj6                                      1/1     Running     3          124d
-node-ca-lzmpt                                      1/1     Running     4          124d
-node-ca-rhqjb                                      1/1     Running     4          124d
-node-ca-s7qbd                                      1/1     Running     4          124d
-node-ca-tsl58                                      1/1     Running     4          124d
-node-ca-wbpvh                                      1/1     Running     3          124d
-node-ca-z7hsp                                      1/1     Running     3          124d
-node-ca-ztk9z                                      1/1     Running     4          124d
+cluster-image-registry-operator-84c659fcbf-dgdgj   1/1     Running     0          12d
+image-pruner-28068480--1-njxwz                     0/1     Completed   0          2d16h
+image-pruner-28069920--1-v584j                     0/1     Completed   0          40h
+image-pruner-28071360--1-xwlrs                     0/1     Completed   0          16h
+image-registry-54f497dc6d-lqgd4                    1/1     Running     0          12d
+node-ca-4l4mt                                      1/1     Running     7          265d
+node-ca-4sfp4                                      1/1     Running     7          265d
+node-ca-bb822                                      1/1     Running     9          264d
+node-ca-btfwr                                      1/1     Running     10         265d
+node-ca-d2h57                                      1/1     Running     7          265d
+node-ca-dm4s4                                      1/1     Running     7          265d
+node-ca-k4z9t                                      1/1     Running     7          265d
+node-ca-pv9gm                                      1/1     Running     12         265d
+node-ca-r5cmq                                      1/1     Running     1          79d
+node-ca-rrfsl                                      1/1     Running     7          265d
 
-NAME                 STATUS   VOLUME                  CAPACITY   ACCESS MODES   STORAGECLASS      AGE
-image-registry-pvc   Bound    image-registry-volume   500Gi      RWX            nfs-non-dynamic   119d
+NAME             STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+image-registry   Bound    pvc-56bf64a9-e831-4ea7-b311-f4167af51cb6   400Gi      RWO            thin-retain    264d
 ```
 
 <span style="color:red"> **Recommendation:** </span>
-- Use VMware or any third party CSI for registry storage instead of nfs-provisioner for support compatibility and performance.
+- image registry PVC is configured under VMware `thin-retain` storage class. Currently it is in `RWO` access modes. For Production setup, it should be in `RWX` access modes.
 
 ## Cluster Security Configuration
 
