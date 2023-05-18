@@ -17,6 +17,10 @@
         - [Storage Classes](#storage-classes)
         - [Internal Image Registry Configuration](#internal-image-registry-configuration)
     - [Cluster Security Configuration](#cluster-security-configuration)
+      - [Default Ingress and API Certificates](#default-ingress-and-api-certificates)
+      - [Identity Providers Configuration](#identity-providers-configuration)
+      - [Cluster Users, Groups, Roles and Permissions](#cluster-users-groups-roles-and-permissions)
+    - [OpenShift Cluster Upgrade](#openshift-cluster-upgrade)
 
 ## Cluster Overview 
 
@@ -39,19 +43,18 @@
 
 |Node Type|Nodes|CPU|Memory|Disks|
 |---|---|---|---|---|
-|Master|vlnfeprodmaster1.nfeocpprod.cluster.adp|8 Cores| 32 GB|250GB|
-|Master|vlnfeprodmaster2.nfeocpprod.cluster.adp|8 Cores| 32 GB|250GB|
-|Master|vlnfeprodmaster3.nfeocpprod.cluster.adp|8 Cores| 32 GB|250GB|
-|Infra|vlnfeprodinfra1.nfeocpprod.cluster.adp|8 Cores| 64 GB|250GB, 1.1TB, 500GB|
-|Infra|vlnfeprodinfra2.nfeocpprod.cluster.adp|8 Cores| 64 GB|250GB, 1.1TB|
-|Infra|vlnfeprodinfra3.nfeocpprod.cluster.adp|8 Cores| 64 GB|250GB, 1.1TB, 500GB|
-|Worker|vlnfeprodnode1.nfeocpprod.cluster.adp|12 Cores| 51 GB|250GB, 300GB|
-|Worker|vlnfeprodnode2.nfeocpprod.cluster.adp|12 Cores| 51 GB|250GB, 300GB|
-|Worker|vlnfeprodnode3.nfeocpprod.cluster.adp|12 Cores| 51 GB|250GB, 50GB, 50GB|
-|Worker|vlnfeprodnode4.nfeocpprod.cluster.adp|12 Cores| 51 GB|250GB|
+|Master|vlnfeprodmaster1.nfeocpprod.cluster.adp|8 Cores| 32 GB|200GB|
+|Master|vlnfeprodmaster2.nfeocpprod.cluster.adp|8 Cores| 32 GB|200GB|
+|Master|vlnfeprodmaster3.nfeocpprod.cluster.adp|8 Cores| 32 GB|200GB|
+|Infra|vlnfeprodinfra1.nfeocpprod.cluster.adp|16 Cores| 96 GB|200GB, 300GB, 200GB, 400GB, 400GB|
+|Infra|vlnfeprodinfra2.nfeocpprod.cluster.adp|16 Cores| 96 GB|200GB, 300GB, 200GB, 400GB, 5GB, 50GB, 1G, 1G, 400GB, 400GB|
+|Infra|vlnfeprodinfra3.nfeocpprod.cluster.adp|16 Cores| 96 GB|200GB, 300GB, 200GB, 400GB, 5GB, 400GB |
+|Worker|vlnfeprodnode1.nfeocpprod.cluster.adp|96 Cores| 264 GB|200GB, 300GB|
+|Worker|vlnfeprodnode2.nfeocpprod.cluster.adp|96 Cores| 264 GB|200GB, 1TB, 300GB|
+|Worker|vlnfeprodnode3.nfeocpprod.cluster.adp|96 Cores| 264 GB|200GB, 3TB, 300GB, 10GB|
+|Worker|vlnfeprodnode4.nfeocpprod.cluster.adp|96 Cores| 264 GB|200GB, 2GB|
 
 ```
-NAME                                  STATUS   ROLES    AGE    VERSION
 NAME                                      STATUS   ROLES    AGE    VERSION
 vlnfeprodinfra1.nfeocpprod.cluster.adp    Ready    infra    264d   v1.22.5+a36406b
 vlnfeprodinfra2.nfeocpprod.cluster.adp    Ready    infra    264d   v1.22.5+a36406b
@@ -146,14 +149,14 @@ vlnfeprodnode4.nfeocpprod.cluster.adp     Ready    worker   79d    v1.22.5+a3640
 | kube-public                                      |                                   |   |
 | kube-system                                      |                                   |   |
 
-<span style="color:red"> **Recommendation:** </span>
+<span style="color:green"> **Recommendation:** </span>
 - Some of of the Infra related components Pods are running on worker nodes. Please use proper labeling, taints and tolerations to schedule Infra Pods on Infra Nodes to save OpenShift licensing cost.
 
 ### Cluster Resource Quotas and Limit Ranges
 
 - Resource Quotas only defined for `openshift-host-network (default)` namespace. 
 
-<span style="color:red"> **Recommendation:** </span>
+<span style="color:green"> **Recommendation:** </span>
 - Define Cluser Resource Quotas and Limit Ranges for above mentioned User Projects for better utilization of Cluster CPU and Memory resources. Also, proper settings of Quotas and Ranges will help identify overall cluster utilization and costing. 
 
 ### Installed Operators
@@ -163,9 +166,11 @@ vlnfeprodnode4.nfeocpprod.cluster.adp     Ready    worker   79d    v1.22.5+a3640
 |Red Hat OpenShift Logging|openshift-logging|openshift-logging|
 |Compliance Operator|openshift-compliance|All Namespaces|
 |OpenShift ElasticSearch Operator|openshift-operators-redhat|All Namespaces|
-|file-integrity-operator|openshift-file-integrity|none|
+|file-integrity-operator|openshift-file-integrity|openshift-file-integrity|
+|Grafana Operator|waps-monitoring|waps-monitoring|
 |Red Hat OpenShift distributed tracing platform|openshift-distributed-tracing|All Namespaces|
 |Kiali Operator|openshift-operators|All Namespaces|
+|Local Storage|openshift-local-storage|openshift-local-storage|
 |Red Hat OpenShift Service Mesh|openshift-operators|All Namespaces|
 
 ### ETCD encryption
@@ -248,7 +253,8 @@ vlnfeprodnode4.nfeocpprod.cluster.adp     1         79d
 ```
 
 <span style="color:green"> **Recommendation:** </span>
--  Leverage equal no. of volumes and similar sizes across all CSI nodes. 
+-  As per best practice, use equual no. of volumes and similar sizes across all CSI nodes. Currently most of PVC claims are mounted on `Infra2` and `Infra3` nodes as per findings in [Cluster Nodes](#cluster-nodes) section. That will significantly increasae IO activity on those nodes and might create performance bottleneck. 
+- Implement third party CSI such as `Portworx` or `OpenShift Data Foundation` to leverage CSI additional features and functionality including IO performance gain for Cluster Persistent Volumes.
 
 ### Storage Classes
 
@@ -259,6 +265,9 @@ thin (default)   kubernetes.io/vsphere-volume   Delete          Immediate       
 thin-retain      kubernetes.io/vsphere-volume   Retain          Immediate           false                  378d
 vsphere-sc       kubernetes.io/vsphere-volume   Delete          Immediate           false                  265d
 ```
+<span style="color:red"> **Recommendation:** </span>
+- Currently cluster is using in-tree vSphere CSI `kubernetes.io/vsphere-volume`.
+- Implement third party CSI such as `Portworx` or `OpenShift Data Foundation` to leverage CSI additional features and functionality including IO performance gain for Cluster Persistent Volumes. 
 
 ### Internal Image Registry Configuration 
 
@@ -355,15 +364,15 @@ spec:
 
 <span style="color:red"> **Recommendation:** </span>
 - Generate two separate SSL certificates as per below and secure `*.apps` and `API` endpoint using those certificates.
-  - one wild card certificate for *.apps.<cluster-name>.<base-domain> with `subjectAltName`.
-  - certificate for `api.<cluster-name>.<base-domina> with `subjectAltName`.
+  - one wild card certificate for `*.apps.<cluster-name>.<base-domain>` with `subjectAltName`.
+  - certificate for `api.<cluster-name>.<base-domain>` with `subjectAltName`.
 
 ### Identity Providers Configuration
 
 - `htpasswd` and `LDAP` identity providers are configured for cluster and working as expected. 
 
 <span style="color:green"> **Recommendation:** </span>
-
+- Configure LDAPSync for LDAP provider if necessary 
 
 ### Cluster Users, Groups, Roles and Permissions
 
@@ -372,7 +381,14 @@ spec:
 
 ## OpenShift Cluster Upgrade
 
-- OpenShift Cluster version: 4.11.20
-- OpenShift Cluster 4.11.x full support ended on April 17,2023 and currently it's in Maintenance support phase till Feb 10, 2024. 
-- Please upgrade this cluster to 4.12.x within 6 months. 
+- OpenShift Cluster version: 4.9.28
+- OpenShift Cluster 4.9.x full support ended on June 10,2022 and Maintenance support ended on April 18, 2023. 
+
+<span style="color:red"> **Recommendation:** </span>
+- Please follow below guidelines to upgrade or migrate workloads from current PROD cluster to net new cluster.
+  - Upgrade existing PROD cluster from 4.9.28 to 4.11.x or 4.12.x for proper support. This requires multi-stage upgrades and not recommended 
+    https://access.redhat.com/labs/ocpupgradegraph/update_path/
+  - Setup net new OpenShift Cluster 4.12.x
+  - Setup Portworx or Kasten on existing PROD OpenShift and net new OpenShift cluster for Application Backup and Restore 
+
 // add picture
